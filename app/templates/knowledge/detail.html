@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }} - Knowledge Base{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="mb-4">
+        <a
+            href="{{ url_for('knowledge.list_articles') }}"
+            class="text-decoration-none"
+        >
+            &larr; Back to Knowledge Base
+        </a>
+    </div>
+
+    <article class="card shadow-sm">
+        <div class="card-body p-4 p-lg-5">
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+                <div>
+                    {% if article.category %}
+                    <span class="badge bg-primary mb-3">
+                        {{ article.category.name }}
+                    </span>
+                    {% endif %}
+
+                    <h1 class="h2">{{ article.title }}</h1>
+
+                    <p class="text-muted mb-0">
+                        Written by {{ article.author.full_name }}
+                    </p>
+
+                    <p class="small text-muted mt-1">
+                        Updated {{ article.updated_at.strftime('%B %d, %Y') }}
+                        &middot; {{ article.view_count }} views
+                    </p>
+                </div>
+
+                {% if not article.is_published %}
+                <span class="badge bg-warning text-dark">
+                    Unpublished
+                </span>
+                {% endif %}
+            </div>
+
+            <div class="lead mb-4">{{ article.summary }}</div>
+
+            <hr>
+
+            <div class="article-content" style="white-space: pre-wrap; overflow-wrap: anywhere;">{{ article.content }}</div>
+
+            {% if current_user.role in ['technician', 'admin'] %}
+            <hr class="my-4">
+
+            <div class="d-flex flex-wrap gap-2">
+                {% if current_user.role == 'admin' or article.author_id == current_user.id %}
+                <a
+                    href="{{ url_for('knowledge.edit_article', article_id=article.id) }}"
+                    class="btn btn-outline-primary"
+                >
+                    Edit Article
+                </a>
+
+                <form
+                    method="POST"
+                    action="{{ url_for('knowledge.toggle_publication', article_id=article.id) }}"
+                >
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                    >
+
+                    {% if article.is_published %}
+                    <button type="submit" class="btn btn-outline-warning">
+                        Unpublish
+                    </button>
+                    {% else %}
+                    <button type="submit" class="btn btn-success">
+                        Publish
+                    </button>
+                    {% endif %}
+                </form>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </article>
+</div>
+{% endblock %}

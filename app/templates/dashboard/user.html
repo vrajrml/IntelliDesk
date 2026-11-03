@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}My Dashboard | IntelliDesk{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="mb-1">My Dashboard</h1>
+        <p class="text-muted mb-0">
+            Welcome, {{ current_user.full_name }}.
+            Here is an overview of your service requests.
+        </p>
+    </div>
+    <a href="{{ url_for('tickets.create_ticket') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i> Create Ticket
+    </a>
+</div>
+
+<h5 class="mb-3">Ticket Overview</h5>
+
+<div class="row g-3">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="text-muted small">Open Tickets</div>
+                <div class="display-6 fw-semibold">{{ ticket_counts.open }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="text-muted small">In Progress</div>
+                <div class="display-6 fw-semibold">{{ ticket_counts.in_progress }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="text-muted small">Resolved Tickets</div>
+                <div class="display-6 fw-semibold">{{ ticket_counts.resolved }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="text-muted small">Total Requests</div>
+                <div class="display-6 fw-semibold">{{ sla_summary.total }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h5 class="mt-4 mb-3">SLA Monitoring</h5>
+
+<div class="row g-3">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card border-success shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Within SLA</div>
+                <div class="h2 text-success mb-0">{{ sla_summary.within_sla }}</div>
+                <small class="text-muted">More than 25% of the SLA time remains.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card border-warning shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Approaching Deadline</div>
+                <div class="h2 text-warning mb-0">{{ sla_summary.approaching }}</div>
+                <small class="text-muted">25% or less of the SLA time remains.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card border-danger shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Overdue</div>
+                <div class="h2 text-danger mb-0">{{ sla_summary.overdue }}</div>
+                <small class="text-muted">The deadline has passed.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card border-secondary shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Completed</div>
+                <div class="h2 mb-0">{{ sla_summary.completed }}</div>
+                <small class="text-muted">Resolved or closed tickets.</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if sla_summary.no_deadline %}
+<div class="alert alert-secondary mt-3 mb-0" role="status">
+    {{ sla_summary.no_deadline }} ticket(s) do not have an SLA deadline.
+</div>
+{% endif %}
+
+{% if overdue_tickets %}
+<div class="card border-danger shadow-sm mt-4">
+    <div class="card-header bg-danger text-white">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        Overdue Tickets
+    </div>
+    <div class="list-group list-group-flush">
+        {% for item in overdue_tickets %}
+        <a href="{{ url_for('tickets.ticket_detail', ticket_id=item.ticket.id) }}"
+           class="list-group-item list-group-item-action">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                    <strong>{{ item.ticket.ticket_number }}</strong>
+                    <div>{{ item.ticket.title }}</div>
+                    <small class="text-muted">
+                        Status: {{ item.ticket.status.replace('_', ' ')|title }}
+                    </small>
+                </div>
+                <span class="badge text-bg-danger">Overdue</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if approaching_tickets %}
+<div class="card border-warning shadow-sm mt-4">
+    <div class="card-header bg-warning-subtle">
+        <i class="bi bi-clock-history me-2"></i>
+        Approaching Deadlines
+    </div>
+    <div class="list-group list-group-flush">
+        {% for item in approaching_tickets %}
+        <a href="{{ url_for('tickets.ticket_detail', ticket_id=item.ticket.id) }}"
+           class="list-group-item list-group-item-action">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                    <strong>{{ item.ticket.ticket_number }}</strong>
+                    <div>{{ item.ticket.title }}</div>
+                </div>
+                <span class="badge text-bg-warning">Due soon</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div class="card shadow-sm border-0 mt-4">
+    <div class="card-body">
+        <h5>Service Requests</h5>
+        <p class="text-muted">
+            Create a request, track its progress, and monitor its SLA deadline.
+        </p>
+        <a href="{{ url_for('tickets.list_tickets') }}" class="btn btn-outline-primary">
+            View My Tickets
+        </a>
+        <a href="{{ url_for('tickets.create_ticket') }}" class="btn btn-primary ms-1">
+            Create Ticket
+        </a>
+    </div>
+</div>
+{% endblock %}

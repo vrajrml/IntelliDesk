@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard | IntelliDesk{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="mb-1">Administrator Dashboard</h1>
+    <p class="text-muted mb-0">
+        Welcome, {{ current_user.full_name }}.
+        Monitor SLA deadlines across the service desk.
+    </p>
+</div>
+
+<h5 class="mb-3">System-Wide SLA Overview</h5>
+
+<div class="row g-3">
+    <div class="col-sm-6 col-lg-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="text-muted small">Total Tickets</div>
+                <div class="display-6 fw-semibold">{{ sla_summary.total }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4">
+        <div class="card border-success shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Within SLA</div>
+                <div class="h2 text-success mb-0">{{ sla_summary.within_sla }}</div>
+                <small class="text-muted">More than 25% of the SLA time remains.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4">
+        <div class="card border-warning shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Approaching Deadline</div>
+                <div class="h2 text-warning mb-0">{{ sla_summary.approaching }}</div>
+                <small class="text-muted">25% or less of the SLA time remains.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4">
+        <div class="card border-danger shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Overdue</div>
+                <div class="h2 text-danger mb-0">{{ sla_summary.overdue }}</div>
+                <small class="text-muted">Deadlines have passed.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4">
+        <div class="card border-secondary shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Completed</div>
+                <div class="h2 mb-0">{{ sla_summary.completed }}</div>
+                <small class="text-muted">Resolved or closed tickets.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4">
+        <div class="card border-secondary shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Without a Deadline</div>
+                <div class="h2 mb-0">{{ sla_summary.no_deadline }}</div>
+                <small class="text-muted">Tickets needing deadline review.</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if overdue_tickets %}
+<div class="card border-danger shadow-sm mt-4">
+    <div class="card-header bg-danger text-white">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        System-Wide Overdue Tickets
+    </div>
+    <div class="list-group list-group-flush">
+        {% for item in overdue_tickets %}
+        <a href="{{ url_for('tickets.ticket_detail', ticket_id=item.ticket.id) }}"
+           class="list-group-item list-group-item-action">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                    <strong>{{ item.ticket.ticket_number }}</strong>
+                    <div>{{ item.ticket.title }}</div>
+                    <small class="text-muted">
+                        Requester: {{ item.ticket.requester.full_name }}
+                        {% if item.ticket.assignee %}
+                            · Assigned to: {{ item.ticket.assignee.full_name }}
+                        {% else %}
+                            · Unassigned
+                        {% endif %}
+                    </small>
+                </div>
+                <span class="badge text-bg-danger">Overdue</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="alert alert-success mt-4">
+    <i class="bi bi-check-circle me-2"></i>
+    No overdue tickets are currently detected.
+</div>
+{% endif %}
+
+{% if approaching_tickets %}
+<div class="card border-warning shadow-sm mt-4">
+    <div class="card-header bg-warning-subtle">
+        <i class="bi bi-clock-history me-2"></i>
+        Tickets Approaching Their Deadlines
+    </div>
+    <div class="list-group list-group-flush">
+        {% for item in approaching_tickets %}
+        <a href="{{ url_for('tickets.ticket_detail', ticket_id=item.ticket.id) }}"
+           class="list-group-item list-group-item-action">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                    <strong>{{ item.ticket.ticket_number }}</strong>
+                    <div>{{ item.ticket.title }}</div>
+                </div>
+                <span class="badge text-bg-warning">Due soon</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div class="card shadow-sm border-0 mt-4">
+    <div class="card-body">
+        <h5>System Administration</h5>
+        <p class="text-muted">
+            Use the SLA overview to identify overdue requests, prioritize follow-up,
+            and review tickets that do not have deadlines.
+        </p>
+        <a href="{{ url_for('tickets.list_tickets') }}" class="btn btn-outline-primary">
+            Open Ticket List
+        </a>
+    </div>
+</div>
+{% endblock %}

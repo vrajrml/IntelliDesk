@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+
+{% block title %}Create Ticket | IntelliDesk{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+
+        <div class="mb-4">
+            <a href="{{ url_for('tickets.list_tickets') }}"
+               class="text-decoration-none">
+                &larr; Back to My Tickets
+            </a>
+
+            <h1 class="h3 mt-3 mb-1">Create a Service Ticket</h1>
+
+            <p class="text-muted">
+                Describe your issue. IntelliDesk can suggest relevant
+                knowledge articles and similar tickets before submission.
+            </p>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+
+                <form method="POST"
+                      action="{{ url_for('tickets.create_ticket') }}">
+
+                    <input type="hidden"
+                           name="csrf_token"
+                           value="{{ csrf_token() }}">
+
+                    <div class="mb-3">
+                        <label for="title" class="form-label">
+                            Ticket Title
+                        </label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            class="form-control"
+                            maxlength="200"
+                            required
+                            value="{{ form_data.get('title', '') }}"
+                            placeholder="Briefly describe the issue"
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="category_id" class="form-label">
+                            Category
+                        </label>
+
+                        <select
+                            id="category_id"
+                            name="category_id"
+                            class="form-select"
+                            required
+                        >
+                            <option value="">Choose a category</option>
+
+                            {% for category in categories %}
+                                <option
+                                    value="{{ category.id }}"
+                                    {% if form_data.get('category_id', '')|string == category.id|string %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ category.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="description" class="form-label">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            class="form-control"
+                            rows="6"
+                            minlength="10"
+                            maxlength="10000"
+                            required
+                            placeholder="Explain what happened, what you expected, and any error messages."
+                        >{{ form_data.get('description', '') }}</textarea>
+
+                        <div class="form-text">
+                            Include enough detail for the support team
+                            to investigate.
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap justify-content-between gap-2">
+                        <a
+                            class="btn btn-outline-secondary"
+                            href="{{ url_for('tickets.list_tickets') }}"
+                        >
+                            Cancel
+                        </a>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <button
+                                type="submit"
+                                name="action"
+                                value="find_similar"
+                                class="btn btn-outline-primary"
+                            >
+                                Find Recommendations
+                            </button>
+
+                            {% if similarity_checked %}
+                                <button
+                                    type="submit"
+                                    name="action"
+                                    value="create_ticket"
+                                    class="btn btn-primary"
+                                >
+                                    Create Ticket Anyway
+                                </button>
+                            {% else %}
+                                <button
+                                    type="submit"
+                                    name="action"
+                                    value="create_ticket"
+                                    class="btn btn-primary"
+                                >
+                                    Submit Ticket
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if knowledge_recommendations %}
+            <section class="card shadow-sm border-0 mb-4"
+                     aria-labelledby="knowledge-recommendations-heading">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex align-items-start gap-3 mb-3">
+                        <div class="fs-3 text-primary" aria-hidden="true">
+                            <i class="bi bi-lightbulb"></i>
+                        </div>
+
+                        <div>
+                            <h2 id="knowledge-recommendations-heading"
+                                class="h5 mb-1">
+                                Recommended Knowledge Base Articles
+                            </h2>
+
+                            <p class="text-muted small mb-0">
+                                These published guides may help you solve
+                                the issue before creating a ticket.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="list-group list-group-flush">
+                        {% for match in knowledge_recommendations %}
+                            {% set article = match.article %}
+
+                            <div class="list-group-item px-0">
+                                <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+
+                                    <div class="flex-grow-1">
+                                        <h3 class="h6 mb-1">
+                                            {{ article.title }}
+                                        </h3>
+
+                                        <p class="text-muted mb-2">
+                                            {{ article.summary }}
+                                        </p>
+
+                                        {% if article.category %}
+                                            <span class="badge text-bg-light border">
+                                                {{ article.category.name }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+
+                                    <span class="badge text-bg-primary">
+                                        {{ match.similarity_percent }}% text match
+                                    </span>
+                                </div>
+
+                                <div class="mt-2">
+                                    <a
+                                        href="{{ url_for('knowledge.article_detail', article_id=article.id) }}"
+                                        class="btn btn-sm btn-outline-primary"
+                                    >
+                                        Read Article
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="alert alert-info mt-3 mb-0" role="note">
+                        Recommendations are based on text similarity.
+                        They are suggestions, not guaranteed solutions.
+                        You can still submit your ticket if the issue
+                        remains unresolved.
+                    </div>
+
+                </div>
+            </section>
+        {% elif similarity_checked %}
+            <section class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h5">Knowledge Base Recommendations</h2>
+
+                    <p class="text-muted mb-0">
+                        No sufficiently relevant published articles were
+                        found. You can continue creating your ticket.
+                    </p>
+                </div>
+            </section>
+        {% endif %}
+
+        {% if similarity_checked %}
+            <section class="card shadow-sm border-0"
+                     aria-labelledby="similar-tickets-heading">
+
+                <div class="card-body p-4">
+
+                    <h2 id="similar-tickets-heading" class="h5 mb-2">
+                        Similar Ticket Recommendations
+                    </h2>
+
+                    <p class="text-muted small">
+                        These tickets have similar wording. They may or may
+                        not describe the same underlying problem.
+                    </p>
+
+                    {% if similar_tickets %}
+                        <div class="list-group list-group-flush">
+
+                            {% for match in similar_tickets %}
+                                {% set related = match.ticket %}
+
+                                <div class="list-group-item px-0">
+
+                                    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+
+                                        <div>
+                                            <div class="fw-semibold">
+                                                {{ related.ticket_number }}
+                                                &mdash;
+                                                {{ related.title }}
+                                            </div>
+
+                                            <div class="small text-muted mt-1">
+                                                Status:
+                                                {{ related.status|replace('_', ' ')|title }}
+                                            </div>
+                                        </div>
+
+                                        <span class="badge text-bg-info">
+                                            {{ match.similarity_percent }}% similar
+                                        </span>
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <a
+                                            href="{{ url_for('tickets.ticket_detail', ticket_id=related.id) }}"
+                                            class="btn btn-sm btn-outline-secondary"
+                                        >
+                                            View Ticket
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+                        <div class="alert alert-info mt-3 mb-0" role="note">
+                            Review these tickets before creating a new one.
+                            You can still submit your ticket if the issue is
+                            different or needs separate tracking.
+                        </div>
+
+                    {% else %}
+                        <div class="alert alert-success mb-0">
+                            No sufficiently similar open or active tickets
+                            were found. You can proceed with ticket creation.
+                        </div>
+                    {% endif %}
+
+                </div>
+            </section>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

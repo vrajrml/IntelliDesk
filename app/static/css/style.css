@@ -1,0 +1,19 @@
+body {
+    min-height: 100vh;
+}
+
+.navbar-brand {
+    letter-spacing: 0.3px;
+}
+
+.card {
+    border-radius: 14px;
+}
+
+.form-control {
+    padding: 10px 12px;
+}
+
+.btn {
+    border-radius: 8px;
+}

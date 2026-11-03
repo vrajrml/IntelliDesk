@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables and secrets
+.env
+!.env.example
+
+# Flask
+instance/
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+
+# Logs
+*.log
+
+# Machine learning artifacts
+ml/saved_models/*.pkl
+ml/saved_models/*.joblib
+
+# Temporary files
+*.tmp
+.DS_Store
+# Backup files
+*.bak
+*.backup
+*.security-backup
+*~

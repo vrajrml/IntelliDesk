@@ -1,0 +1,181 @@
+text,category
+My laptop will not turn on,Hardware
+The desktop computer shuts down unexpectedly,Hardware
+My monitor shows a black screen,Hardware
+The keyboard keys are not responding,Hardware
+My mouse keeps disconnecting,Hardware
+The laptop battery is not charging,Hardware
+The computer is making a clicking noise,Hardware
+The printer is not powering on,Hardware
+My laptop overheats during normal use,Hardware
+The monitor keeps flickering,Hardware
+The USB port does not recognize devices,Hardware
+My laptop screen is physically damaged,Hardware
+The computer fan is unusually loud,Hardware
+The external hard drive is not detected,Hardware
+The webcam hardware is not working,Hardware
+The laptop power adapter is damaged,Hardware
+The desktop keeps restarting unexpectedly,Hardware
+My keyboard has several broken keys,Hardware
+The printer paper feed mechanism is jammed,Hardware
+The laptop touchpad does not respond,Hardware
+The computer has a faulty memory module,Hardware
+My second monitor is not displaying anything,Hardware
+The docking station does not detect peripherals,Hardware
+The laptop hinge is broken,Hardware
+The headset microphone hardware is faulty,Hardware
+The computer will not boot after installation,Hardware
+My laptop battery drains immediately,Hardware
+The printer produces pages with mechanical marks,Hardware
+The desktop power button does not work,Hardware
+The external monitor disconnects when moved,Hardware
+The application crashes when I open it,Software
+My software installation fails with an error,Software
+The spreadsheet application freezes frequently,Software
+An application update will not install,Software
+The program displays an unexpected error message,Software
+My application is extremely slow,Software
+The desktop software closes without warning,Software
+I cannot open a particular document in the application,Software
+The application settings are not being saved,Software
+The software reports a missing library,Software
+The program crashes when I export a report,Software
+A new application version broke an existing feature,Software
+The application displays a blank window,Software
+My development environment fails to compile code,Software
+The software license activation fails inside the application,Software
+The application cannot open its configuration file,Software
+A plugin causes the program to crash,Software
+The software installer stops before completion,Software
+The application produces incorrect calculation results,Software
+The application update is stuck,Software
+A desktop program reports an internal error,Software
+The application cannot save my work,Software
+The program becomes unresponsive after startup,Software
+A required software component is missing,Software
+The application interface renders incorrectly,Software
+The program fails when processing a large file,Software
+The software cannot import a supported file,Software
+An application feature stopped working after an update,Software
+The program repeatedly asks me to reinstall it,Software
+The application cannot connect to its local database,Software
+I cannot connect to the office Wi-Fi,Network
+The internet connection keeps disconnecting,Network
+The network is extremely slow,Network
+I cannot access the company intranet,Network
+The VPN connection fails repeatedly,Network
+Websites are not loading on the office network,Network
+My computer cannot obtain an IP address,Network
+The network printer is unreachable,Network
+The Ethernet connection is not working,Network
+The wireless network disappears intermittently,Network
+I cannot reach the internal server over the network,Network
+The VPN disconnects every few minutes,Network
+Network latency is very high,Network
+DNS lookup failures prevent websites from opening,Network
+The office network connection drops during meetings,Network
+My computer reports limited network connectivity,Network
+The router connection appears unstable,Network
+I cannot connect to a shared network drive,Network
+The network connection is slower than usual,Network
+The remote desktop connection cannot be established,Network
+Wi-Fi works in one room but not another,Network
+The computer cannot communicate with the gateway,Network
+The network cable connection is intermittent,Network
+The company VPN cannot resolve internal hostnames,Network
+File transfers across the network keep failing,Network
+The network connection times out frequently,Network
+I cannot access an internal website,Network
+The wireless adapter cannot find available networks,Network
+The office internet connection is unavailable,Network
+The connection to the remote server is unstable,Network
+I forgot my password and cannot sign in,Account Access
+My account is locked after several login attempts,Account Access
+I cannot reset my account password,Account Access
+The login page rejects my correct credentials,Account Access
+I need access to my company account,Account Access
+My multifactor authentication code is not accepted,Account Access
+My account appears to be disabled,Account Access
+I cannot complete the account verification process,Account Access
+The password reset link has expired,Account Access
+I need permission to access a restricted account,Account Access
+My single sign-on login fails,Account Access
+I cannot authenticate to the employee portal,Account Access
+The system says my username does not exist,Account Access
+I lost access to my authentication device,Account Access
+My account is locked and I need it unlocked,Account Access
+I cannot enroll in multifactor authentication,Account Access
+The identity verification process keeps failing,Account Access
+My account session expires immediately after login,Account Access
+I need my account access restored,Account Access
+The password change request is rejected,Account Access
+I cannot sign in after my password was changed,Account Access
+My employee portal says access is denied,Account Access
+I need help recovering my username,Account Access
+The authentication app is not generating valid codes,Account Access
+My account has been suspended unexpectedly,Account Access
+I cannot access the system with single sign-on,Account Access
+The account recovery email never arrives,Account Access
+I am unable to authenticate with my credentials,Account Access
+My login attempts are blocked by the system,Account Access
+I need my account permissions reviewed,Account Access
+I cannot send emails from my mailbox,Email & Communication
+Incoming emails are not appearing,Email & Communication
+My email messages are stuck in the outbox,Email & Communication
+Email attachments fail to upload,Email & Communication
+The mail application cannot synchronize my inbox,Email & Communication
+I cannot open a meeting invitation,Email & Communication
+Calendar invitations are not reaching attendees,Email & Communication
+My mailbox storage limit has been exceeded,Email & Communication
+Emails are being delivered to the wrong folder,Email & Communication
+The email client keeps asking for my password,Email & Communication
+I cannot access my company mailbox,Email & Communication
+Messages sent to external recipients are rejected,Email & Communication
+My email signature is missing,Email & Communication
+The calendar application does not show new events,Email & Communication
+Email synchronization stops unexpectedly,Email & Communication
+I cannot attach files to outgoing messages,Email & Communication
+Meeting notifications are not being delivered,Email & Communication
+My email client displays a sending error,Email & Communication
+Messages from a colleague are missing,Email & Communication
+The shared mailbox is not visible,Email & Communication
+I cannot create a calendar meeting,Email & Communication
+The mail server rejects outgoing messages,Email & Communication
+My inbox is not updating automatically,Email & Communication
+Email forwarding is not working,Email & Communication
+The email application cannot download attachments,Email & Communication
+My calendar events are not synchronizing,Email & Communication
+A distribution list is not receiving messages,Email & Communication
+The email client crashes when opening messages,Email & Communication
+I cannot find archived emails in my mailbox,Email & Communication
+My meeting invitation updates are not synchronized,Email & Communication
+I need help finding the correct support department,Other
+Please explain the company's equipment return procedure,Other
+I have a general question about an internal process,Other
+I need information about the office relocation procedure,Other
+Please clarify the employee expense reimbursement process,Other
+I need guidance on submitting a facilities request,Other
+I have a question about company policies,Other
+Please tell me how to request office supplies,Other
+I need information about employee onboarding,Other
+I have a general administrative inquiry,Other
+Please explain the visitor registration process,Other
+I need help understanding the travel approval procedure,Other
+I have a question about the equipment loan policy,Other
+Please provide information about the training registration process,Other
+I need guidance on submitting a general service request,Other
+I have a question about the office parking procedure,Other
+Please clarify the document retention policy,Other
+I need information about an internal company procedure,Other
+I have a general question about workplace services,Other
+Please explain how to submit an administrative request,Other
+I need guidance about the employee handbook,Other
+I have a question about the office access procedure,Other
+Please provide details about the company's travel policy,Other
+I need information about requesting a workplace accommodation,Other
+I have a general inquiry about employee services,Other
+Please explain the internal procurement process,Other
+I need help identifying the appropriate service request type,Other
+I have a question about the company's training policy,Other
+Please provide guidance on a general workplace matter,Other
+I need information about the internal support process,Other

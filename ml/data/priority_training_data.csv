@@ -1,0 +1,121 @@
+text,priority
+"How do I change my desktop wallpaper",low
+"Request to install an optional font",low
+"Please update my profile display name",low
+"Need help connecting an unused printer",low
+"Request information about available software",low
+"Please install a nonessential application when convenient",low
+"How can I customize email signatures",low
+"Request access to an optional training portal",low
+"Need instructions for organizing desktop files",low
+"Please help me configure a secondary monitor",low
+"Request a replacement mouse for occasional use",low
+"How do I archive old emails",low
+"Please add a shortcut to an application",low
+"Need help adjusting notification preferences",low
+"Request installation of an optional browser extension",low
+"How do I change my meeting calendar color",low
+"Please update a document template",low
+"Need instructions for connecting a personal headset",low
+"Request access to a nonessential shared folder",low
+"Please help me configure a screensaver",low
+"Need guidance on using spreadsheet formatting",low
+"Request a routine software update for next week",low
+"How can I change my default PDF application",low
+"Please help organize my bookmarks",low
+"Request a new keyboard for a spare workstation",low
+"Need assistance setting up optional email filters",low
+"How do I change the language in an application",low
+"Please install a standard utility when available",low
+"Request documentation for a new application",low
+"Need help changing my desktop background settings",low
+"Email search is slightly slower than usual but usable",medium
+"My mouse sometimes disconnects and reconnects",medium
+"One user cannot print routine documents",medium
+"Spreadsheet application freezes occasionally",medium
+"VPN connection drops intermittently for one employee",medium
+"Please restore access to a routine shared folder",medium
+"One workstation has a slow startup",medium
+"Email attachments take longer than usual to open",medium
+"An application displays a nonblocking error message",medium
+"Need help configuring a recently installed printer",medium
+"One employee cannot access a standard business application",medium
+"Wi-Fi signal is weak in one office room",medium
+"Computer storage is nearly full but applications still work",medium
+"Calendar synchronization is delayed for one user",medium
+"One employee is experiencing occasional login problems",medium
+"Network file transfers are slower than normal for one user",medium
+"An application update did not complete on one workstation",medium
+"Need to restore a deleted noncritical document",medium
+"Printer produces occasional blank pages",medium
+"Video meetings have intermittent audio problems for one employee",medium
+"One user cannot connect to a secondary monitor",medium
+"Email notifications are delayed for a single mailbox",medium
+"An office application repeatedly asks for an update",medium
+"One employee reports intermittent remote desktop lag",medium
+"A shared folder permission appears incorrect for one user",medium
+"One workstation unexpectedly restarts once a day",medium
+"Browser crashes occasionally when opening several tabs",medium
+"One user cannot synchronize their work calendar",medium
+"Network drive disconnects intermittently for one employee",medium
+"Routine business software is unavailable on one workstation",medium
+"Several employees cannot use the main business application",high
+"Department printer is unavailable during working hours",high
+"An employee is locked out of an account needed for today's work",high
+"Repeated application crashes prevent an employee from completing tasks",high
+"Office Wi-Fi is unavailable in one department",high
+"Multiple users cannot access an important shared folder",high
+"Business application performance is severely degraded for a team",high
+"Several employees cannot send or receive business emails",high
+"An important workstation will not boot before a deadline",high
+"VPN failure prevents a remote employee from completing urgent work",high
+"Security software is disabled on a business workstation",high
+"Important files are inaccessible to a project team",high
+"Multiple users are experiencing failed authentication",high
+"Network printing is down for an entire department",high
+"An application error blocks an important scheduled business process",high
+"Database client errors prevent a team from completing work",high
+"Several employees cannot join scheduled video meetings",high
+"Critical project files are missing from a shared drive",high
+"Repeated network disconnects affect a whole office floor",high
+"Business email access fails for a manager before a major deadline",high
+"Workstation overheating causes repeated shutdowns during important work",high
+"Important report generation fails for multiple employees",high
+"Department-wide access permissions prevent normal work",high
+"An essential application update broke an important workflow",high
+"Remote desktop access fails for several employees",high
+"Shared storage is almost unavailable and multiple users are affected",high
+"Multiple workstations cannot authenticate to the office network",high
+"An important license server is unavailable to a department",high
+"Team-wide calendar failure disrupts scheduled customer meetings",high
+"Major file transfer delays are blocking a department deliverable",high
+"Entire office network is down and all employees have lost connectivity",critical
+"Production business application is completely unavailable to the organization",critical
+"Confirmed ransomware activity is encrypting files across multiple systems",critical
+"Organization-wide authentication failure prevents employees from signing in",critical
+"Core database outage has stopped critical business operations",critical
+"Email service is completely unavailable across the company",critical
+"Network outage has disconnected every office location",critical
+"Confirmed unauthorized access to sensitive company systems is underway",critical
+"Production servers are down and customer services have stopped",critical
+"Shared storage failure has made essential business data unavailable organization-wide",critical
+"Security incident indicates active exfiltration of sensitive company data",critical
+"Company-wide VPN failure has stopped all remote operations during an emergency",critical
+"Core payment processing service is down for all customers",critical
+"Production database corruption is affecting essential business records",critical
+"Organization-wide malware outbreak is disrupting multiple systems",critical
+"Emergency response team cannot access essential incident management systems",critical
+"All company users are unable to access the primary business platform",critical
+"Major data center outage has interrupted all critical services",critical
+"Active security breach is compromising administrator accounts across the company",critical
+"Network core failure has stopped business communications at every site",critical
+"Customer-facing production system is down during a major service disruption",critical
+"Critical infrastructure monitoring is offline during an active incident",critical
+"Company-wide certificate failure has disabled essential production services",critical
+"Essential identity provider outage prevents access to all business applications",critical
+"Backup systems have failed during an active destructive cyber incident",critical
+"Organization-wide file service outage blocks access to essential business data",critical
+"Multiple production systems have stopped after a severe infrastructure failure",critical
+"Active attack is disrupting company networks and business operations",critical
+"Critical enterprise service outage is affecting all departments simultaneously",critical
+"Core network and authentication services are unavailable across the organization",critical

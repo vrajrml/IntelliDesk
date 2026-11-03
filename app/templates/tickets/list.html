@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}My Tickets | IntelliDesk{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">My Tickets</h1>
+        <p class="text-muted mb-0">Track your service requests and their progress.</p>
+    </div>
+
+    <a class="btn btn-primary" href="{{ url_for('tickets.create_ticket') }}">
+        + Create Ticket
+    </a>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <form method="GET" action="{{ url_for('tickets.list_tickets') }}">
+            <div class="row g-2">
+                <div class="col-md-8">
+                    <label for="q" class="form-label">Search tickets</label>
+                    <input
+                        id="q"
+                        name="q"
+                        class="form-control"
+                        type="search"
+                        placeholder="Ticket number, title, or description"
+                        value="{{ search }}"
+                    >
+                </div>
+
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select id="status" name="status" class="form-select">
+                        <option value="">All statuses</option>
+                        {% for value, label in [
+                            ("open", "Open"),
+                            ("in_progress", "In Progress"),
+                            ("waiting_for_user", "Waiting for You"),
+                            ("resolved", "Resolved"),
+                            ("closed", "Closed")
+                        ] %}
+                            <option value="{{ value }}"
+                                {% if selected_status == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-1 d-flex align-items-end">
+                    <button class="btn btn-outline-primary w-100" type="submit">
+                        Go
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        {% if tickets %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-3">Ticket</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for ticket in tickets %}
+                            <tr>
+                                <td class="ps-3">
+                                    <a href="{{ url_for('tickets.ticket_detail', ticket_id=ticket.id) }}"
+                                       class="fw-semibold text-decoration-none">
+                                        {{ ticket.ticket_number }}
+                                    </a>
+                                </td>
+
+                                <td>{{ ticket.title }}</td>
+                                <td>{{ ticket.category.name }}</td>
+
+                                <td>
+                                    <span class="badge
+                                        {% if ticket.priority == 'critical' %}text-bg-danger
+                                        {% elif ticket.priority == 'high' %}text-bg-warning
+                                        {% elif ticket.priority == 'medium' %}text-bg-primary
+                                        {% else %}text-bg-secondary{% endif %}">
+                                        {{ ticket.priority|replace('_', ' ')|title }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="badge text-bg-light border">
+                                        {{ ticket.status|replace('_', ' ')|title }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <small class="text-muted">
+                                        {{ ticket.created_at.strftime("%b %d, %Y") }}
+                                    </small>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5 px-3">
+                <h2 class="h5">No tickets found</h2>
+                <p class="text-muted">
+                    You haven't submitted any tickets matching these filters.
+                </p>
+                <a class="btn btn-primary" href="{{ url_for('tickets.create_ticket') }}">
+                    Create Your First Ticket
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

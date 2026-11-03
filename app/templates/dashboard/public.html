@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome | IntelliDesk{% endblock %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+    <div class="container-fluid py-4">
+        <h1 class="display-5 fw-bold">Welcome to IntelliDesk</h1>
+
+        <p class="col-md-8 fs-5 text-muted">
+            An intelligent service request management system
+            designed to simplify support, track issues, and
+            help teams resolve problems efficiently.
+        </p>
+
+        <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">
+            Log In
+        </a>
+
+        <a href="{{ url_for('auth.register') }}"
+           class="btn btn-outline-primary btn-lg ms-2">
+            Create Account
+        </a>
+    </div>
+</div>
+{% endblock %}

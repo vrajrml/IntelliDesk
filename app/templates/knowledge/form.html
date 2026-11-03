@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_heading }} - IntelliDesk{% endblock %}
+
+{% block content %}
+{% set data = form_data or {} %}
+
+<div class="container py-4">
+    <div class="mb-4">
+        <a
+            href="{{ url_for('knowledge.list_articles') }}"
+            class="text-decoration-none"
+        >
+            &larr; Back to Knowledge Base
+        </a>
+
+        <h1 class="h2 mt-3">{{ page_heading }}</h1>
+        <p class="text-muted">
+            Write a clear troubleshooting guide that helps users resolve common problems.
+        </p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <form method="POST">
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Article Title</label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        class="form-control"
+                        maxlength="200"
+                        required
+                        value="{{ data.get('title', article.title if article else '') }}"
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label for="summary" class="form-label">Summary</label>
+                    <textarea
+                        id="summary"
+                        name="summary"
+                        class="form-control"
+                        rows="3"
+                        maxlength="500"
+                        required
+                    >{{ data.get('summary', article.summary if article else '') }}</textarea>
+                    <div class="form-text">
+                        Briefly describe the problem and the solution this article covers.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="category_id" class="form-label">Category</label>
+                    <select id="category_id" name="category_id" class="form-select">
+                        <option value="">No category</option>
+                        {% for category in categories %}
+                        <option
+                            value="{{ category.id }}"
+                            {% if data.get('category_id', article.category_id|string if article and article.category_id else '')|string == category.id|string %}selected{% endif %}
+                        >
+                            {{ category.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="content" class="form-label">Article Content</label>
+                    <textarea
+                        id="content"
+                        name="content"
+                        class="form-control"
+                        rows="16"
+                        maxlength="50000"
+                        required
+                    >{{ data.get('content', article.content if article else '') }}</textarea>
+                    <div class="form-text">
+                        Use plain text. Separate steps and paragraphs with line breaks.
+                    </div>
+                </div>
+
+                {% if current_user.role == 'admin' or article is none %}
+                <div class="form-check mb-4">
+                    <input
+                        type="checkbox"
+                        id="is_published"
+                        name="is_published"
+                        value="1"
+                        class="form-check-input"
+                        {% if data.get('is_published') == '1' or (article and article.is_published) %}checked{% endif %}
+                    >
+                    <label for="is_published" class="form-check-label">
+                        Publish this article
+                    </label>
+                </div>
+                {% endif %}
+
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        Save Article
+                    </button>
+
+                    <a
+                        href="{{ url_for('knowledge.list_articles') }}"
+                        class="btn btn-outline-secondary"
+                    >
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

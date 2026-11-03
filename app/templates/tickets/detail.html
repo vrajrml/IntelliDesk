@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block title %}{{ ticket.ticket_number }} - IntelliDesk{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <div>
+            <a href="{{ url_for('tickets.list_tickets') }}"
+               class="text-decoration-none">&larr; Back to My Tickets</a>
+            <h1 class="h3 mt-2">{{ ticket.title }}</h1>
+            <span class="text-muted">{{ ticket.ticket_number }}</span>
+        </div>
+
+        <span class="badge bg-primary fs-6">
+            {{ ticket.status.replace('_', ' ')|title }}
+        </span>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Ticket Description</h2>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0" style="white-space: pre-wrap;">{{ ticket.description }}</p>
+                </div>
+            </div>
+
+            {% if current_user.role in ['technician', 'admin'] %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Update Ticket</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST"
+                          action="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">
+                        <input type="hidden" name="csrf_token"
+                               value="{{ csrf_token() }}">
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="status" class="form-label">Status</label>
+                                <select id="status" name="status" class="form-select" required>
+                                    {% for value in ['open', 'in_progress', 'waiting_for_user', 'resolved', 'closed'] %}
+                                    <option value="{{ value }}"
+                                        {% if ticket.status == value %}selected{% endif %}>
+                                        {{ value.replace('_', ' ')|title }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="priority" class="form-label">Priority</label>
+                                <select id="priority" name="priority" class="form-select" required>
+                                    {% for value in ['low', 'medium', 'high', 'critical'] %}
+                                    <option value="{{ value }}"
+                                        {% if ticket.priority == value %}selected{% endif %}>
+                                        {{ value|title }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-3">
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if current_user.role == 'admin' %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Assign Technician</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST"
+                          action="{{ url_for('tickets.assign_ticket', ticket_id=ticket.id) }}">
+                        <input type="hidden" name="csrf_token"
+                               value="{{ csrf_token() }}">
+
+                        <label for="assignee_id" class="form-label">
+                            Active Technician
+                        </label>
+
+                        <select id="assignee_id" name="assignee_id" class="form-select">
+                            <option value="">Unassigned</option>
+                            {% for technician in technicians %}
+                            <option value="{{ technician.id }}"
+                                {% if ticket.assignee_id == technician.id %}selected{% endif %}>
+                                {{ technician.full_name }} ({{ technician.username }})
+                            </option>
+                            {% endfor %}
+                        </select>
+
+                        <button type="submit" class="btn btn-outline-primary mt-3">
+                            Save Assignment
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Comments and Updates</h2>
+                </div>
+
+                <div class="card-body">
+                    {% set visible_comments = namespace(found=false) %}
+
+                    {% for comment in ticket.comments|sort(attribute='created_at') %}
+                        {% if not comment.is_internal or current_user.role in ['technician', 'admin'] %}
+                            {% set visible_comments.found = true %}
+                            <div class="border rounded p-3 mb-3">
+                                <div class="d-flex justify-content-between flex-wrap gap-2 mb-2">
+                                    <strong>{{ comment.author.full_name }}</strong>
+                                    <small class="text-muted">
+                                        {{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                    </small>
+                                </div>
+
+                                {% if comment.is_internal %}
+                                <span class="badge bg-warning text-dark mb-2">
+                                    Internal Note
+                                </span>
+                                {% endif %}
+
+                                <p class="mb-0" style="white-space: pre-wrap;">{{ comment.message }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if not visible_comments.found %}
+                    <p class="text-muted">No comments yet.</p>
+                    {% endif %}
+
+                    <hr>
+
+                    <form method="POST"
+                          action="{{ url_for('tickets.add_comment', ticket_id=ticket.id) }}">
+                        <input type="hidden" name="csrf_token"
+                               value="{{ csrf_token() }}">
+
+                        <label for="message" class="form-label">Add a Comment</label>
+                        <textarea id="message" name="message" class="form-control"
+                                  rows="4" maxlength="5000" required></textarea>
+
+                        {% if current_user.role in ['technician', 'admin'] %}
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox"
+                                   id="is_internal" name="is_internal" value="1">
+                            <label class="form-check-label" for="is_internal">
+                                Internal note (visible only to staff)
+                            </label>
+                        </div>
+                        {% endif %}
+
+                        <button type="submit" class="btn btn-primary mt-3">
+                            Add Comment
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Ticket Information</h2>
+                </div>
+
+                <div class="card-body">
+                    <dl class="mb-0">
+                        <dt>Requester</dt>
+                        <dd>{{ ticket.requester.full_name }}</dd>
+
+                        <dt>Selected Category</dt>
+                        <dd>{{ ticket.category.name }}</dd>
+
+                        {% if ticket.predicted_category %}
+                        <dt>AI Category Recommendation</dt>
+                        <dd>
+                            <span class="badge bg-info text-dark">
+                                {{ ticket.predicted_category }}
+                            </span>
+                        </dd>
+
+                        {% if ticket.prediction_confidence is not none %}
+                        <dt>Category Model Estimate</dt>
+                        <dd>
+                            {{ "%.2f"|format(ticket.prediction_confidence * 100) }}%
+                            <div class="progress mt-2"
+                                 role="progressbar"
+                                 aria-label="AI category model estimate"
+                                 aria-valuenow="{{ (ticket.prediction_confidence * 100)|round|int }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                                <div class="progress-bar"
+                                     style="width: {{ (ticket.prediction_confidence * 100)|round(2) }}%">
+                                </div>
+                            </div>
+                            <small class="text-muted">
+                                Model estimate only; not a guarantee of correctness.
+                            </small>
+                        </dd>
+                        {% endif %}
+                        {% endif %}
+
+                        <dt>Actual Priority</dt>
+                        <dd>
+                            {% set priority_badges = {
+                                'low': 'bg-success',
+                                'medium': 'bg-primary',
+                                'high': 'bg-warning text-dark',
+                                'critical': 'bg-danger'
+                            } %}
+                            <span class="badge {{ priority_badges.get(ticket.priority, 'bg-secondary') }}">
+                                {{ ticket.priority|title }}
+                            </span>
+                        </dd>
+
+                        {% if ticket.predicted_priority %}
+                        <dt>AI Priority Recommendation</dt>
+                        <dd>
+                            <span class="badge {{ priority_badges.get(ticket.predicted_priority, 'bg-secondary') }}">
+                                {{ ticket.predicted_priority|title }}
+                            </span>
+                            <div class="small text-muted mt-2">
+                                Suggested by the ticket text classifier.
+                                This recommendation does not automatically change the actual priority.
+                            </div>
+                        </dd>
+                        {% endif %}
+
+                        <dt>Assigned Technician</dt>
+                        <dd>
+                            {% if ticket.assignee %}
+                                {{ ticket.assignee.full_name }}
+                            {% else %}
+                                <span class="text-muted">Unassigned</span>
+                            {% endif %}
+                        </dd>
+
+                        <dt>Created</dt>
+                        <dd>{{ ticket.created_at.strftime('%Y-%m-%d %H:%M') }}</dd>
+
+                        <dt>Last Updated</dt>
+                        <dd>{{ ticket.updated_at.strftime('%Y-%m-%d %H:%M') }}</dd>
+
+                        <dt>SLA Status</dt>
+                        <dd>
+                            {% if sla_status.status == 'within_sla' %}
+                                <span class="badge text-bg-success">
+                                    {{ sla_status.label }}
+                                </span>
+                            {% elif sla_status.status == 'approaching' %}
+                                <span class="badge text-bg-warning">
+                                    {{ sla_status.label }}
+                                </span>
+                            {% elif sla_status.status == 'overdue' %}
+                                <span class="badge text-bg-danger">
+                                    {{ sla_status.label }}
+                                </span>
+                            {% elif sla_status.status == 'completed' %}
+                                <span class="badge text-bg-secondary">
+                                    {{ sla_status.label }}
+                                </span>
+                            {% else %}
+                                <span class="badge text-bg-light">
+                                    {{ sla_status.label }}
+                                </span>
+                            {% endif %}
+                        </dd>
+
+                        <dt>Resolution Due</dt>
+                        <dd>
+                            {% if ticket.due_at %}
+                                {{ ticket.due_at.strftime('%Y-%m-%d %H:%M') }}
+
+                                {% if sla_status.status == 'overdue' %}
+                                    <div class="small text-danger mt-1">
+                                        This ticket has passed its SLA deadline.
+                                    </div>
+                                {% elif sla_status.status in ['within_sla', 'approaching'] %}
+                                    {% set remaining = sla_status.remaining_seconds %}
+                                    {% set remaining_hours = (remaining // 3600)|int %}
+                                    {% set remaining_minutes = ((remaining % 3600) // 60)|int %}
+
+                                    <div class="small mt-1 {% if sla_status.status == 'approaching' %}text-warning-emphasis{% else %}text-success{% endif %}">
+                                        {{ remaining_hours }}h {{ remaining_minutes }}m remaining
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-muted">Not set</span>
+                            {% endif %}
+                        </dd>
+
+                        {% if ticket.resolved_at %}
+                        <dt>Resolved At</dt>
+                        <dd>{{ ticket.resolved_at.strftime('%Y-%m-%d %H:%M') }}</dd>
+                        {% endif %}
+                    </dl>
+                </div>
+            </div>
+
+            {% if current_user.role in ['technician', 'admin'] and ticket.history %}
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Recent History</h2>
+                </div>
+                <div class="card-body">
+                    {% for entry in ticket.history|sort(attribute='created_at', reverse=true) %}
+                    <div class="border-bottom pb-2 mb-2">
+                        <strong>{{ entry.field_name.replace('_', ' ')|title }}</strong>
+                        <div class="small text-muted">
+                            {% if entry.old_value %}
+                                {{ entry.old_value }} &rarr;
+                            {% endif %}
+                            {{ entry.new_value or '—' }}
+                        </div>
+                        <small class="text-muted">
+                            {{ entry.created_at.strftime('%Y-%m-%d %H:%M') }}
+                            {% if entry.changed_by %}
+                                · {{ entry.changed_by.full_name }}
+                            {% endif %}
+                        </small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
